@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>  
+  <script type="application/javascript" src="site.js"></script>
+  <script type="application/javascript" src="grammar.js"></script>
+  <script type="application/javascript" src="lexer.js"></script>
+  <script type="application/javascript" src="parser.js"></script>
+  <link media="all" rel="stylesheet" href="style.css" />
+</head>
+<body onload='init()'>
+
+  <table>
+    <tbody>
+      <tr><td><button type='button' onclick='indent();'>Indent</button></td><td></td></tr>
+      <tr>
+        <td><textarea id='source' class="editor" cols='80' rows='40' wrap='off'></textarea></td>
+        <td><textarea id='result' class="editor" cols='80' rows='40' wrap='off'></textarea></td>
+      </tr>    
+      <tr><td colspan='2'><textarea id='log' cols='150' rows='5'></textarea></td></tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
