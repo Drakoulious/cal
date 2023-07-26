@@ -6,41 +6,44 @@ const TokenType = {
 }
 
 function tokenize() {
-  var token = nextToken(undefined);
+  let token = nextToken(undefined);
   while (token !== undefined) {
     addFunctionsToToken(token);
     tokens.push(token);
-    token = nextToken(token);    
+    token = nextToken(token);
   }
-  logme(`Finish tokenizer. Tokens: ${tokens.length}, lines: ${tokens[tokens.length-1].lie}`);
+  logme(`Finish tokenizer. Tokens: ${tokens.length}, lines: ${tokens[tokens.length - 1].lie}`);
 }
 
+/**
+ * @param {{ i: number; li: number; lie: number; ci: number; cie: number; v: string; }} pt
+ */
 function nextToken(pt) {
-  var li = (pt === undefined ? 0 : pt.lie);  
-  var ci = (pt === undefined ? 0 : pt.cie + 1);     
-  var ti = (pt === undefined ? 0 : pt.i + 1);     
-  for (var i = li; i < lines.length; i++) {
-    for (var y = ci; y < lines[i].length; y++) {
-      var c = lines[i][y];
+  let li = (pt === undefined ? 0 : pt.lie);
+  let ci = (pt === undefined ? 0 : pt.cie + 1);
+  let ti = (pt === undefined ? 0 : pt.i + 1);
+  for (let i = li; i < lines.length; i++) {
+    for (let y = ci; y < lines[i].length; y++) {
+      let c = lines[i][y];
       if (c === " ") {
         //return t;
       }
-      else if (c === '/' && lines[i][y+1] === '/') { // inline comment
-        return {i: ti, li: i, lie: i, ci: y, cie: y + lines[i].substring(y).length-1, t: TokenType.Comment, v: lines[i].substring(y)};
+      else if (c === '/' && lines[i][y + 1] === '/') { // inline comment
+        return { i: ti, li: i, lie: i, ci: y, cie: y + lines[i].substring(y).length - 1, t: TokenType.Comment, v: lines[i].substring(y) };
       }
       else if (c === '{') { // block comment
-        var t = {i: ti, li: i, lie: 0, ci: y, cie: 0, v: c, t: TokenType.Comment};
+        let t = { i: ti, li: i, lie: 0, ci: y, cie: 0, v: c, t: TokenType.Comment };
         y++;
-        var stack = 1;
+        let stack = 1;
         for (; i < lines.length; i++) {
           for (; y < lines[i].length; y++) {
-            c = lines[i][y];          
+            c = lines[i][y];
             if (stack === 0) {
               return t;
             }
             if (c === '{') {
               stack++;
-            } 
+            }
             else if (c === '}') {
               stack--;
             }
@@ -54,36 +57,37 @@ function nextToken(pt) {
 
       }
       else if (`"'`.indexOf(c) !== -1) { // quotes
-        var t = {i: ti, li: i, lie: i, ci: y, cie: 0, v: c};
+        let t = { i: ti, li: i, lie: i, ci: y, cie: 0, v: c };
         y++;
         for (; y < lines[i].length; y++) {
           t.v += lines[i][y];
           if (lines[i][y] === c) {
-            if (lines[i][y+1] !== c) { 
+            if (lines[i][y + 1] !== c) {
               t.cie = y;
-              t.v = t.v.toUpperCase();
+              //t.v = t.v.toUpperCase();
               return t;
             }
             else {
-              t.v += lines[i][y];               
+              t.v += lines[i][y];
               y++;
             }
           }
         }
       }
       else if (op.indexOf(c) !== -1) { // operators
-        var t = {i: ti, li: i, lie: i, ci: y, cie:0, v: c};
-        if (c === ':' && `:=`.indexOf(lines[i][y+1] !== -1)) {
-          t.v += lines[i][y+1];
+        let t = { i: ti, li: i, lie: i, ci: y, cie: 0, v: c };
+        if (c === ':' && `:=`.indexOf(lines[i][y + 1]) !== -1) {
+          t.v += lines[i][y + 1];
         }
-        t.cie = t.ci+t.v.length-1;
-        t.v = t.v.toUpperCase();
-        return t;      
-      }     
+        t.cie = t.ci + t.v.length - 1;
+        //t.v = t.v.toUpperCase();
+        return t;
+      }
       else {
-        var t = {i: ti, li: i, lie: i, ci: y, cie: 0, v: ""};
+        let t = { i: ti, li: i, lie: i, ci: y, cie: 0, v: "" };
         for (; y < lines[i].length; y++) {
           if (tsep.indexOf(lines[i][y]) !== -1) {
+            t.v = t.v.toUpperCase();    
             return t;
           }
           else {
@@ -95,36 +99,52 @@ function nextToken(pt) {
         return t;
       }
     }
-  ci = 0;  
+    ci = 0;
   }
 }
 
+/**
+ * @param {{ i: number; li: number; lie: number; ci: number; cie: number; v: any; next?: function; prev?: function; }} token
+ */
 function addFunctionsToToken(token) {
-  token.next = function(maxIndex, v, incStack, decStack) {
+
+  token.next = function (/** @type {number} */ maxIndex, /** @type {string} */ v, /** @type {string[]} */ incStack, /** @type {string[]} */ decStack) {
     if (maxIndex === undefined) { // no params
-      return tokens[this.i+1];
+      let i = this.i + 1;
+      while (tokens[i].t === TokenType.Comment) {
+        i++;
+      }
+      return tokens[i];
     }
     if (v === undefined) { // maxIndex
-      return this.i + 1 > maxIndex ? undefined : tokens[this.i+1];    
+      //return this.i + 1 > maxIndex ? undefined : tokens[this.i+1];    
+      let i = this.i + 1;
+      while (tokens[i].t === TokenType.Comment) {
+        i++;
+        if (i > maxIndex) {
+          return undefined;
+        }
+      }
+      return tokens[i];
     }
 
-    var stack = 1;
-    var blockStack = 0;
-    for (var i = this.i + 1; i <= maxIndex; i++) {
-      var t = tokens[i];
+    let stack = 1;
+    let blockStack = 0;
+    for (let i = this.i + 1; i <= maxIndex; i++) {
+      let t = tokens[i];
       if (t.v === v.toUpperCase() && blockStack <= 0) {
         stack--;
         if (blockStack <= 0 && stack === 0) {
           return tokens[i];
         }
-      }      
+      }
       else if (incStack !== undefined && incStack.indexOf(t.v) !== -1 && blockStack <= 0) {
         stack++;
       }
       else if (decStack !== undefined && decStack.indexOf(t.v) !== -1 && blockStack <= 0) {
         stack--;
       }
-  
+
       if (startBlocks.indexOf(t.v) !== -1) {
         blockStack++;
       }
@@ -136,27 +156,42 @@ function addFunctionsToToken(token) {
       }
     }
   }
-  token.prev = function() {
-    return tokens[this.i-1];
+
+  token.prev = function (/** @type {string} */ searchExp) {
+    for (let i = this.i - 1; i >= 0; i--) {
+      let t = tokens[i];
+      if (t.t !== TokenType.Comment && (t.v === searchExp || searchExp === undefined)) {
+        return t;
+      }
+    }
   }
 
 }
 
+/**
+ * @param {number} curTokIndex
+ * @param {number} maxIndex
+ * @param {boolean} isFirstFind
+ */
 function nextTokenIndex(curTokIndex, maxIndex, isFirstFind) {
-  var fromIndex = isFirstFind ? curTokIndex : curTokIndex + 1;
-  for (var i=fromIndex; i <= maxIndex; i++) {
+  let fromIndex = isFirstFind ? curTokIndex : curTokIndex + 1;
+  for (let i = fromIndex; i <= maxIndex; i++) {
     if (tokens[i].t !== TokenType.Comment) {
       return i;
     }
   }
 }
 
+/**
+ * @param {number} fromIndex
+ * @param {number} maxIndex
+ */
 function lastTokenIndex(fromIndex, maxIndex) {
-  var stack = 1;
-  var blockStack = 0;
+  let stack = 1;
+  let blockStack = 0;
 
-  for (var i = fromIndex; i <= maxIndex; i++) {
-    var val = tokens[i].v.toUpperCase();
+  for (let i = fromIndex; i <= maxIndex; i++) {
+    let val = tokens[i].v.toUpperCase();
     if (startBlocks.indexOf(val) !== -1) {
       stack++;
       blockStack++;

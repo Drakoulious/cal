@@ -20,6 +20,7 @@ function init() {
   src = document.getElementById('source');
   res = document.getElementById('result');
   logt = document.getElementById('log');
+    // @ts-ignore
     src.value = `
 IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
 IF LineNo = 0 THEN
@@ -81,6 +82,9 @@ function increaseLineIndent(sli, eli) {
   }
 }
 
+/**
+ * @param {string} v
+ */
 function logme(v) {
   logt.value += v + '\n';
 }
