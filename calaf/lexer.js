@@ -12,7 +12,7 @@ function tokenize() {
     tokens.push(token);
     token = nextToken(token);
   }
-  logme(`Finish tokenizer. Tokens: ${tokens.length}, lines: ${tokens[tokens.length - 1].lie}`);
+  logme(`Tokens: ${tokens.length}`);
 }
 
 /**

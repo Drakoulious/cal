@@ -63,21 +63,35 @@ function reset() {
 
 function printResult() {
   res.value = "";
+  let difCount = 0;
   for (var i = 0; i < lines.length; i++) {
+    let resLine = "";
     if (linesIndent[i] !== undefined) {
-      res.value += " ".repeat(linesIndent[i]);
+      resLine += " ".repeat(linesIndent[i]);
     }
     let t = getTokenFromPos(i, 0);
     if (t !== undefined && t.t === TokenType.Comment) {
-      res.value += lines[i] + '\n';      
+      resLine += lines[i];      
     }
     else {
-      res.value += lines[i].trimLeft() + '\n';
+      resLine += lines[i].trimLeft();
     }
+    if (lines[i] !== resLine) {
+      difCount++;
+    }
+    if (i< lines.length - 1){
+      resLine += '\n';
+    }
+    res.value += resLine;    
     
   }
+  logme(`Lines changed: ${difCount} of ${lines.length}`)
 }
 
+/**
+ * @param {number} sli Start line index
+ * @param {number} eli End line index
+ */
 function increaseLineIndent(sli, eli) {
   for (var i = sli; i <= eli; i++) {
     if (lines[i].length > 0) {

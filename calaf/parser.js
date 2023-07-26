@@ -94,8 +94,13 @@ function parseIf(s) {
     }
 
     let elseBegin = elseTok !== undefined && elseTok.next(s.li).v === "BEGIN";
+    //debugger;
     let elseBeginTok = elseBegin ? elseTok.next(s.li) : undefined;
-    let elseEndTok = elseBegin ? tokens[s.li].prev() : undefined;
+    //let elseEndTok = elseBegin ? tokens[s.li].prev() : undefined;
+    let elseEndTok = elseBegin ? tokens[s.li] : undefined;
+    if (elseEndTok !== undefined && elseEndTok.v !== "END") {
+        elseEndTok = elseEndTok.prev();
+    }
 
     let fromLineIndex, toLineIndex;
 
@@ -110,7 +115,13 @@ function parseIf(s) {
         // then        
         if (elseTok.li - thenTok.li > 1 || (elseTok.li - thenTok.li === 1 && elseTok.li === tokens[s.li].li)) {
             fromLineIndex = thenBegin ? thenBeginTok.li + 1 : thenTok.li + 1;
-            toLineIndex = thenBegin ? thenEndTok.li - 1 : elseTok.li - (elseTok.li - thenTok.li === 1 && elseTok.li === tokens[s.li].li && elseTok.ci > 0 ? 0 : 1);
+            //toLineIndex = thenBegin ? thenEndTok.li - 1 : elseTok.li - (elseTok.li - thenTok.li === 1 && elseTok.li === tokens[s.li].li && elseTok.ci > 0 ? 0 : 1);
+            let elseIsFirstTok = elseTok.li !== elseTok.prev().li;
+            let elseIsLastLine = elseTok.li === tokens[s.li].li;
+            let linesBetweenThenAndElse = elseTok.li - thenTok.li;
+            //then ...
+            //  ... else ...;
+            toLineIndex = thenBegin ? thenEndTok.li - 1 : elseTok.li - (linesBetweenThenAndElse === 1 && elseIsLastLine && !elseIsFirstTok ? 0 : 1);
             increaseLineIndent(fromLineIndex, toLineIndex);
         }
         // else                        
@@ -231,7 +242,7 @@ function parseDoBegin(s) {
         s.statements.push(findStatements(beginTok.next(endTok.i).i, endTok.prev().i));
     }
     else {
-        increaseLineIndent(doTok.li + 1, s.li);
+        increaseLineIndent(doTok.li + 1, tokens[s.li].li);
         s.statements.push(findStatements(doTok.next(s.li).i, s.li));
     }
 }
