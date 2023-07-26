@@ -67,7 +67,14 @@ function printResult() {
     if (linesIndent[i] !== undefined) {
       res.value += " ".repeat(linesIndent[i]);
     }
-    res.value += lines[i].trimLeft() + '\n';
+    let t = getTokenFromPos(i, 0);
+    if (t !== undefined && t.t === TokenType.Comment) {
+      res.value += lines[i] + '\n';      
+    }
+    else {
+      res.value += lines[i].trimLeft() + '\n';
+    }
+    
   }
 }
 

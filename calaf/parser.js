@@ -47,25 +47,19 @@ function parseStatement(s) {
         case "IF":
             parseIf(s);
             break;
-        /*
-            case "REPEAT":
-              parseRepeat(s);
-              break;
-              */
+        case "REPEAT":
+            parseRepeat(s);
+            break;
         case "CASE":
             parseCase(s);
             break;
-        /*
-      case "WITH":
-        parseWith(s);
-        break;
-      case "FOR":
-        parseFor(s);
-        break;
-      case "WHILE":
-        parseWhile(s);
-        break;
-  */
+
+        case "WITH":
+        case "FOR":
+        case "WHILE":
+            parseDoBegin(s);
+            break;
+
         default:
             parseNoncmd(s);
             break;
@@ -221,5 +215,35 @@ function parseCase(s) {
 
         }
     }
+}
+
+/**
+ * @param {{ fi: number; li: number; statements: any[]; }} s
+ */
+function parseDoBegin(s) {
+    let firstTok = tokens[s.fi];
+    let doTok = firstTok.next(s.li, "DO");
+    let begin = doTok.next(s.li).v === "BEGIN";
+    let beginTok = begin ? doTok.next() : null;
+    let endTok = begin ? beginTok.next(s.li, "END") : null;
+    if (begin) {
+        increaseLineIndent(beginTok.li + 1, endTok.li - 1);
+        s.statements.push(findStatements(beginTok.next(endTok.i).i, endTok.prev().i));
+    }
+    else {
+        increaseLineIndent(doTok.li + 1, s.li);
+        s.statements.push(findStatements(doTok.next(s.li).i, s.li));
+    }
+}
+
+/**
+ * @param {{ fi: number; li: number; statements: any; }} s
+ */
+function parseRepeat(s) {
+    let repeatTok = tokens[s.fi];
+    let untilTok = repeatTok.next(s.li, "UNTIL");
+    increaseLineIndent(repeatTok.li + 1, untilTok.li - 1);
+    //sentence.Sentences.AddRange(FindSentences(NextCommandPos(repeatTok, sentence.LastCommandPos), PrevCommandPos(untilTok)));    
+    s.statements.push(findStatements(repeatTok.next(s.li).i, untilTok.prev().i));
 }
 

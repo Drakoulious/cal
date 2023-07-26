@@ -38,9 +38,6 @@ function nextToken(pt) {
         for (; i < lines.length; i++) {
           for (; y < lines[i].length; y++) {
             c = lines[i][y];
-            if (stack === 0) {
-              return t;
-            }
             if (c === '{') {
               stack++;
             }
@@ -48,8 +45,12 @@ function nextToken(pt) {
               stack--;
             }
             t.v += c;
-            t.cie = y;
-            t.lie = i;
+            if (stack === 0) {
+              t.cie = y;
+              t.lie = i;
+              return t;
+            }
+
           }
           t.v += '\n';
           y = 0;
@@ -87,7 +88,7 @@ function nextToken(pt) {
         let t = { i: ti, li: i, lie: i, ci: y, cie: 0, v: "" };
         for (; y < lines[i].length; y++) {
           if (tsep.indexOf(lines[i][y]) !== -1) {
-            t.v = t.v.toUpperCase();    
+            t.v = t.v.toUpperCase();
             return t;
           }
           else {
@@ -208,4 +209,20 @@ function lastTokenIndex(fromIndex, maxIndex) {
       return i;
     }
   }
+}
+
+/**
+ * Get token from specified line number and char index
+ * @param {number} li Line index
+ * @param {number} ci Char index
+ */
+function getTokenFromPos(li, ci) {
+  let tok;
+  tokens.forEach(t => {
+    if (li >= t.li && li <= t.lie && ci >= t.ci && ci <= t.cie) {
+      tok = t;
+      return;
+    }
+  });
+  return tok;
 }
