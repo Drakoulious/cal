@@ -8,11 +8,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <link rel="icon" type="image/x-icon" href="favicon.ico?v=0.4">
-  <script type="application/javascript" src="grammar.js?v=0.4"></script>
-  <script type="application/javascript" src="lexer.js?v=0.4"></script>
-  <script type="application/javascript" src="parser.js?v=0.4"></script>
-  <link media="all" rel="stylesheet" href="style.css?v=0.4" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=0.6">
+  <script type="application/javascript" src="grammar.js?v=0.6"></script>
+  <script type="application/javascript" src="lexer.js?v=0.6"></script>
+  <script type="application/javascript" src="parser.js?v=0.6"></script>
+  <script type="application/javascript" src="site.js?v=0.6"></script>
+  <link media="all" rel="stylesheet" href="style.css?v=0.6" />
   <title>C/AL auto-formatting</title>
 </head>
 
@@ -24,6 +25,9 @@
     <ul class="navbar-nav ">
       <li class="nav-item active">
         <a class="nav-link" href="#" onclick="indent();">Format</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="#" onclick="clear2();">Clear</a>
       </li>
     </ul>
 
@@ -39,7 +43,7 @@
 
 
   <div class="container">
-    <textarea id='editor' class="form-control" cols='132' rows="25" wrap='off'></textarea>
+    <textarea id='editor' class="form-control" cols='132' rows="32" wrap='off'></textarea>
     <br>
     <div id='log'></div>
   </div>
@@ -59,7 +63,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
-  <script type="application/javascript" src="site.js?v=0.2"></script>
 
 </body>
 

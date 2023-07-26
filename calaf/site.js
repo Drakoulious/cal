@@ -19,8 +19,7 @@ function indent() {
 function init() {
   textarea = document.getElementById('editor');  
   logt = document.getElementById('log');  
-  textarea.value = `
-IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
+  textarea.value = `IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
 IF LineNo = 0 THEN
 ERROR(
 Text028,
@@ -56,6 +55,12 @@ function reset() {
   tokens = [];
   statements = [];  
   logt.innerHTML = "";
+  
+}
+
+function clear2() {
+  reset();  
+  textarea.value = "";
 }
 
 function printResult() {
