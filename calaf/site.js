@@ -1,5 +1,5 @@
 var screenSize = 132;
-var src, res, logt;
+var textarea, logt;
 var tokens = [];
 const indentSpaces = 2;
 var lines = [];
@@ -9,19 +9,17 @@ var statements = [];
 
 function indent() {
   reset();
-  lines = src.value.split('\n');  
+  lines = textarea.value.split('\n');
   tokenize();
   parse();
-  printResult();  
+  printResult();
   //tokens.forEach(t => res.value += JSON.stringify(t) + '\n');
 }
 
 function init() {
-  src = document.getElementById('source');
-  res = document.getElementById('result');
-  logt = document.getElementById('log');
-    // @ts-ignore
-    src.value = `
+  textarea = document.getElementById('editor');  
+  logt = document.getElementById('log');  
+  textarea.value = `
 IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
 IF LineNo = 0 THEN
 ERROR(
@@ -50,19 +48,18 @@ Cust.CheckBlockedCustOnDocs(Cust,"Document Type",FALSE,TRUE);
 END;
 END;
 `;
-    }
+}
 
 function reset() {
   linesIndent = [];
   lines = [];
   tokens = [];
-  statements = [];
-  res.value = "";
-  logt.value = "";
+  statements = [];  
+  logt.innerHTML = "";
 }
 
 function printResult() {
-  res.value = "";
+  textarea.value = "";
   let difCount = 0;
   for (var i = 0; i < lines.length; i++) {
     let resLine = "";
@@ -71,7 +68,7 @@ function printResult() {
     }
     let t = getTokenFromPos(i, 0);
     if (t !== undefined && t.t === TokenType.Comment) {
-      resLine += lines[i];      
+      resLine += lines[i];
     }
     else {
       resLine += lines[i].trimLeft();
@@ -79,11 +76,11 @@ function printResult() {
     if (lines[i] !== resLine) {
       difCount++;
     }
-    if (i< lines.length - 1){
+    if (i < lines.length - 1) {
       resLine += '\n';
     }
-    res.value += resLine;    
-    
+    textarea.value += resLine;
+
   }
   logme(`Lines changed: ${difCount} of ${lines.length}`)
 }
@@ -99,7 +96,7 @@ function increaseLineIndent(sli, eli) {
         linesIndent[i] = 0;
       }
       linesIndent[i] += indentSpaces;
-    }                
+    }
   }
 }
 
@@ -107,5 +104,5 @@ function increaseLineIndent(sli, eli) {
  * @param {string} v
  */
 function logme(v) {
-  logt.value += v + '\n';
+  logt.innerHTML += v + '<br>';
 }
