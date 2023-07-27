@@ -110,3 +110,4 @@ function increaseLineIndent(sli, eli) {
 function logme(v) {
   logt.innerHTML += v + '<br>';
 }
+
