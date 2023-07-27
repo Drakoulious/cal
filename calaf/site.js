@@ -86,7 +86,7 @@ function printResult() {
     textarea.value += resLine;
 
   }
-  logme(`Lines changed: ${difCount} of ${lines.length}`)
+  logme(`Lines changed: ${difCount} of ${lines.length-1}`)
 }
 
 /**
