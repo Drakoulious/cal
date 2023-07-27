@@ -12,8 +12,7 @@ function indent() {
   lines = textarea.value.split('\n');
   tokenize();
   parse();
-  printResult();
-  //tokens.forEach(t => res.value += JSON.stringify(t) + '\n');
+  printResult();  
 }
 
 function init() {
