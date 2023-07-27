@@ -4,6 +4,7 @@ var tokens = [];
 const indentSpaces = 2;
 var lines = [];
 var linesIndent = [];
+var linesTouched = [];
 var statements = [];
 
 
@@ -50,11 +51,12 @@ END;
 
 function reset() {
   linesIndent = [];
+  linesTouched = [];
   lines = [];
   tokens = [];
   statements = [];  
   logt.innerHTML = "";
-  
+  textarea.paintLineNumbers();
 }
 
 function clear2() {
@@ -78,6 +80,7 @@ function printResult() {
       resLine += lines[i].trimLeft();
     }
     if (lines[i] !== resLine) {
+      linesTouched[i] = 1;
       difCount++;
     }
     if (i < lines.length - 1) {
@@ -86,7 +89,8 @@ function printResult() {
     textarea.value += resLine;
 
   }
-  logme(`Lines changed: ${difCount} of ${lines.length-1}`)
+  textarea.paintLineNumbers();
+  logme(`Touched lines: ${difCount}`)
 }
 
 /**
