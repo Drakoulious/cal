@@ -9,18 +9,30 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=0.7">
+  <script type="application/javascript" src="grammar.js?v=0.7"></script>
+  <script type="application/javascript" src="lexer.js?v=0.7"></script>
+  <script type="application/javascript" src="parser.js?v=0.7"></script>
+  <script type="application/javascript" src="site.js?v=0.10"></script>
+  <script type="application/javascript" src="test.js?v=0.1"></script>
+  <script type="application/javascript" src="testdata.js?v=0.2"></script>
   <link media="all" rel="stylesheet" href="style.css?v=0.8" />
-  <title>C/AL auto-formatting about</title>
+  <title>C/AL auto-formatting</title>
 </head>
 
-<body'>
+<body onload='init(false)'>
 
   <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="index.html">C/AL</a>    
+    <a class="navbar-brand" href="index.html">C/AL</a>
+
+    <ul class="navbar-nav ">
+      <li class="nav-item active">
+        <a class="nav-link" href="#" onclick="runTest();">Run all</a>
+      </li>      
+    </ul>
 
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="about.html">About</a>
       </li>
     </ul>
 
@@ -30,11 +42,16 @@
 
 
   <div class="container">
-    C/AL code auto-formatting. Version: 0.2, 2023-07
-    <br>
-    Your source code is not sent to the server. Formatting happens on the client side in the browser.
+    <div id="wrapper">
+      <textarea id="editor" cols="150" rows="10" class="form-control" style="display: none;"></textarea>
+    </div>
+    <!--<textarea id='editor' class="form-control" cols='132' rows="34" wrap='off' spellcheck="false"></textarea>    -->
+    <div id='log'></div>
   </div>
-    
+  
+
+  <script type="application/javascript" src="numbers.js?v=0.2"></script>
+
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

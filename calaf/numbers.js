@@ -85,4 +85,4 @@ var TextAreaLineNumbersWithCanvas = function () {
 };
 
 var ta = TextAreaLineNumbersWithCanvas();
-ta.value = TextAreaLineNumbersWithCanvas.toString();
+//ta.value = TextAreaLineNumbersWithCanvas.toString();

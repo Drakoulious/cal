@@ -9,17 +9,22 @@ var statements = [];
 
 
 function indent() {
-  reset();
+  reset(true);
   lines = textarea.value.split('\n');
   tokenize();
   parse();
-  printResult();  
+
+  logme(`Touched lines: ${printResult()}`);
 }
 
-function init() {
-  textarea = document.getElementById('editor');  
-  logt = document.getElementById('log');  
-  textarea.value = `IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
+/**
+ * @param {boolean} loadSample
+ */
+function init(loadSample) {
+  textarea = document.getElementById('editor');
+  logt = document.getElementById('log');
+  if (loadSample) {
+    textarea.value = `IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
 IF LineNo = 0 THEN
 ERROR(
 Text028,
@@ -47,20 +52,26 @@ Cust.CheckBlockedCustOnDocs(Cust,"Document Type",FALSE,TRUE);
 END;
 END;
 `;
+  }
 }
 
-function reset() {
+/**
+ * @param {boolean} [clearLog]
+ */
+function reset(clearLog) {
   linesIndent = [];
   linesTouched = [];
   lines = [];
   tokens = [];
-  statements = [];  
-  logt.innerHTML = "";
+  statements = [];
+  if (clearLog) {
+    logt.innerHTML = "";
+  }
   textarea.paintLineNumbers();
 }
 
 function clear2() {
-  reset();  
+  reset(true);
   textarea.value = "";
 }
 
@@ -90,7 +101,7 @@ function printResult() {
 
   }
   textarea.paintLineNumbers();
-  logme(`Touched lines: ${difCount}`)
+  return difCount;
 }
 
 /**

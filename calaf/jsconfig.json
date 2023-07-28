@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {"alwaysStrict": true,
+     "allowJs": true,
+     "checkJs": true,
+     "target": "ES2015"
+    },
+    "files": [
+        "lexer.js",
+        "parser.js",
+        "site.js",
+        "grammar.js",
+        "style.css",
+        "index.html",
+        "numbers.js",
+        "test.js",
+        "testdata.js"
+    ]
+}

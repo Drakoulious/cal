@@ -127,7 +127,11 @@ function parseIf(s) {
         // else                        
         fromLineIndex = elseBegin ? elseBeginTok.li + 1 : elseTok.li + 1;
         toLineIndex = elseBegin ? elseEndTok.li - 1 : tokens[s.li].li;
-        increaseLineIndent(fromLineIndex, toLineIndex);
+        let elseIf = elseTok.next().v === "IF"
+        if (!elseIf || (elseIf && elseTok.li !== elseTok.next().li) ) {
+            increaseLineIndent(fromLineIndex, toLineIndex);
+        }
+        
     }
 
     // subtree recursive
