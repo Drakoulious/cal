@@ -9,10 +9,11 @@ var statements = [];
 
 
 function indent() {
+  loadSettings();
   reset(true);
   lines = textarea.value.split('\n');
   tokenize();
-  parse();
+  parse(loadSettings());
 
   logme(`Touched lines: ${printResult()}`);
 }
@@ -108,13 +109,13 @@ function printResult() {
  * @param {number} sli Start line index
  * @param {number} eli End line index
  */
-function increaseLineIndent(sli, eli) {
+function increaseLineIndent(sli, eli, addIndent) {
   for (var i = sli; i <= eli; i++) {
     if (lines[i].length > 0) {
       if (linesIndent[i] === undefined) {
         linesIndent[i] = 0;
-      }
-      linesIndent[i] += indentSpaces;
+      }      
+      linesIndent[i] += addIndent !== undefined ? addIndent : indentSpaces;      
     }
   }
 }

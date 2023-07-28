@@ -1,9 +1,11 @@
 var testData = [];
 
 //#0
-testData.push(`
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 if 2 = 1 
-  or 4=3
+   or 4=3
 then  begin
   if 2 = 3 then
     message('3')
@@ -68,10 +70,12 @@ if z=3 then
 else begin
   if x=4 then
     message('ok');
-end;`);
+end;`});
 
 //#1
-testData.push(`
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 IF Amount <> 0 THEN
   IF Amount > 0 THEN
     Sales := Sales + Amount
@@ -82,10 +86,12 @@ IF Amount <> 0 THEN
       ELSE
         Credits := Credits + Amount
     ELSE
-      Sales := Sales - Amount;`);
+      Sales := Sales - Amount;`});
 
 //#2
-testData.push(`
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 if a=0 Then
 Begin
   If b=0 Then
@@ -97,46 +103,63 @@ Begin
   Begin
     x := c/b;
   end;
-end;`);
+end;`});
 
 //#3
-testData.push(`
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 if a=0 Then
-  x := c/b;`);
+  x := c/b;`});
 
 //#4
-testData.push(`
+testData.push({
+  settings: {
+    indExpBetwIfThenByFirstTokenAfterIf: { value: 'true' }
+  },
+  data: `
 if a=0 Then
   x := c/b
 else
-  z := 3;`);
+  z := 3;`});
 
 //#5
-testData.push(`
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 if a=0 Then begin
   x := c/b
 end
 else
-  z := 3;`);
+  z := 3;`});
 
 //#6
-testData.push(`
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 if a=0 Then begin
   x := c/b
 end
 else begin
   z := 3;
-end`, `
+end`});
+
+//#7
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 IF ReservEntry.FINDSET THEN
   REPEAT
     IF ReservEntry."Appl.- from Item Entry" = 0 THEN
       ItemTracking:= FALSE;
   UNTIL ReservEntry.NEXT = 0
 ELSE
-  ItemTracking:= FALSE;`);
+  ItemTracking:= FALSE;`});
 
-//#7
-testData.push(`
+//#8
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 case 3 of
   1: message('1');
   2: begin
@@ -144,10 +167,12 @@ case 3 of
   end
   else
     message('x')
-end;`);
+end;`});
 
-//#8
-testData.push(`
+//#9
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 case 3 of
   1: 
     message('1');
@@ -156,10 +181,12 @@ case 3 of
   end
   else
     message('x')
-end;`);
+end;`});
 
-//#9
-testData.push(`
+//#10
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 case 3 of
   1: 
     message('1');
@@ -169,10 +196,12 @@ case 3 of
   else begin
     message('x')
   end
-end;`);
+end;`});
 
-//#10
-testData.push(`
+//#11
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 case 3 of
   1: 
     message('1');
@@ -182,10 +211,12 @@ case 3 of
   else begin
     message('x')
   end;
-end;`);
+end;`});
 
-//#11
-testData.push(`
+//#12
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 case 3 of
   1: 
     message('1');
@@ -196,10 +227,12 @@ case 3 of
   begin
     message('x')
   end;
-end;`);
+end;`});
 
-//#12
-testData.push(`
+//#13
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 CASE SourceType OF
   SourceType::Sales: SetSalesHeaderLocal(GLobalSalesHeader);
   SourceType::Shipment: SetWhseShipmentHeaderLocal(GlobalWhseShipmentHeader);
@@ -207,25 +240,36 @@ CASE SourceType OF
   SourceType::Shipment2: SetWhseShipmentHeader2Local(GlobalWhseShipmentHeader);
   SourceType::PostShipment: SetPostWhseShipmentHeaderLocal(GlobalPostedWhseShipmentHeader);
   ELSE ERROR('%1', SourceType);
-END;`);
-
-//#13
-testData.push(`
-for i:=1 to 10 do
-  message('ok');`);
+END;`});
 
 //#14
-testData.push(`
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
+for i:=1 to 10 do
+  message('ok');`});
+
+//#15
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 for i:=1 to 10 do begin
   message('ok');
-end;`, `
+end;`});
+
+//#16
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 for i:=1 to 10 do 
 begin
   message('ok');
-end;`);
+end;`});
 
-//#15
-testData.push(`
+//#17
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 NeedInsert := FALSE;
 IF (BlanketOrderSalesLine."Qty. to Ship" <> 0)
 THEN BEGIN
@@ -238,10 +282,12 @@ ELSE IF TempInsertedLine.GET(BlanketOrderSalesLine."Document Type",
   BlanketOrderSalesLine."Attached to Line No.")
 THEN 
   NeedInsert := TRUE;
-`);
+`});
 
-//#16
-testData.push(`
+//#18
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
 IF 1=1 THEN BEGIN
   IF 2=2 THEN BEGIN
     IF 3=3 THEN 
@@ -250,4 +296,25 @@ IF 1=1 THEN BEGIN
   ELSE 
     ERROR('2');
 END;
-`)
+`})
+
+//#19
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'false' },
+  data: `
+if 2 = 1 
+  or 4=3
+then 
+  message('ok);
+`})
+
+//#19
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
+if 2 = 1 
+   or 4=3
+   or 4=3   
+then 
+  message('ok);
+`})

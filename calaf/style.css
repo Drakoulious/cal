@@ -55,3 +55,8 @@ body {
 #log {
     color: #a7a7a7;
 }
+
+.code {
+    background-color: white;
+    padding-left: 4px;
+}

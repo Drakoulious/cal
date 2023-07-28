@@ -2,7 +2,10 @@
 //##################################################################
 // PARSER 
 
-function parse() {
+var parserSettings;
+
+function parse(settings_) {
+    parserSettings = settings_;
     statements.push(findStatements(0, tokens.length - 1));
 }
 
@@ -73,7 +76,20 @@ function parseIf(s) {
     let ifTok = tokens[s.fi];
     let thenTok = ifTok.next(s.li, "THEN");
     if (thenTok.li - ifTok.li > 1) {
-        increaseLineIndent(ifTok.li + 1, thenTok.li - 1);
+        if (parserSettings.indExpBetwIfThenByFirstTokenAfterIf === "true") {
+            let IfIsFirstTok = ifTok.prev() === undefined || ifTok.li !== ifTok.prev().li;
+            if (!IfIsFirstTok) {
+                increaseLineIndent(ifTok.li + 1, thenTok.li - 1);
+            }
+            else {
+                let indent = ifTok.next().ci - ifTok.ci;
+                increaseLineIndent(ifTok.li + 1, thenTok.li - 1, indent);
+            }
+        }
+        else {
+            increaseLineIndent(ifTok.li + 1, thenTok.li - 1);
+            
+        }
     }
     //debugger;
     let thenBegin = thenTok.next().v === "BEGIN";
@@ -128,10 +144,10 @@ function parseIf(s) {
         fromLineIndex = elseBegin ? elseBeginTok.li + 1 : elseTok.li + 1;
         toLineIndex = elseBegin ? elseEndTok.li - 1 : tokens[s.li].li;
         let elseIf = elseTok.next().v === "IF"
-        if (!elseIf || (elseIf && elseTok.li !== elseTok.next().li) ) {
+        if (!elseIf || (elseIf && elseTok.li !== elseTok.next().li)) {
             increaseLineIndent(fromLineIndex, toLineIndex);
         }
-        
+
     }
 
     // subtree recursive
