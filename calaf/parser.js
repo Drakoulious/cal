@@ -63,6 +63,10 @@ function parseStatement(s) {
             parseDoBegin(s);
             break;
 
+        case "BEGIN":
+            parseBegin(s);
+            break;
+
         default:
             parseNoncmd(s);
             break;
@@ -75,23 +79,27 @@ function parseStatement(s) {
 function parseIf(s) {
     let ifTok = tokens[s.fi];
     let thenTok = ifTok.next(s.li, "THEN");
-    if (thenTok.li - ifTok.li > 1) {
+
+    // indent between IF and THEN
+    if (thenTok.li - ifTok.li > 0) {        
+        let fromLineIndex = ifTok.li + 1;
+        let toLineIndex = thenTok.li === thenTok.prev().li ? thenTok.li : thenTok.li - 1;        
         if (parserSettings.indExpBetwIfThenByFirstTokenAfterIf === "true") {
             let IfIsFirstTok = ifTok.prev() === undefined || ifTok.li !== ifTok.prev().li;
             if (!IfIsFirstTok) {
-                increaseLineIndent(ifTok.li + 1, thenTok.li - 1);
+                increaseLineIndent(fromLineIndex, toLineIndex);
             }
             else {
                 let indent = ifTok.next().ci - ifTok.ci;
-                increaseLineIndent(ifTok.li + 1, thenTok.li - 1, indent);
+                increaseLineIndent(fromLineIndex, toLineIndex, indent);
             }
         }
         else {
-            increaseLineIndent(ifTok.li + 1, thenTok.li - 1);
+            increaseLineIndent(fromLineIndex, toLineIndex);
             
         }
-    }
-    //debugger;
+    }    
+
     let thenBegin = thenTok.next().v === "BEGIN";
     let thenBeginTok = thenBegin ? thenTok.next() : undefined;
     let thenEndTok = thenBegin ? thenBeginTok.next(s.li, "END") : undefined;
@@ -109,8 +117,7 @@ function parseIf(s) {
         elseTok = thenTok.next(s.li, "ELSE", ["IF"], ["ELSE"]);
     }
 
-    let elseBegin = elseTok !== undefined && elseTok.next(s.li).v === "BEGIN";
-    //debugger;
+    let elseBegin = elseTok !== undefined && elseTok.next(s.li).v === "BEGIN";    
     let elseBeginTok = elseBegin ? elseTok.next(s.li) : undefined;
     //let elseEndTok = elseBegin ? tokens[s.li].prev() : undefined;
     let elseEndTok = elseBegin ? tokens[s.li] : undefined;
@@ -273,8 +280,31 @@ function parseDoBegin(s) {
 function parseRepeat(s) {
     let repeatTok = tokens[s.fi];
     let untilTok = repeatTok.next(s.li, "UNTIL");
-    increaseLineIndent(repeatTok.li + 1, untilTok.li - 1);
-    //sentence.Sentences.AddRange(FindSentences(NextCommandPos(repeatTok, sentence.LastCommandPos), PrevCommandPos(untilTok)));    
+
+    // indent body
+    let prevTok = repeatTok.prev();
+    if (prevTok === undefined || prevTok.v !== "THEN" || prevTok.li !== repeatTok.li) {
+        increaseLineIndent(repeatTok.li + 1, untilTok.li - 1);
+    }
+    else {
+        decreaseLineIndent(untilTok.li, untilTok.li);
+    }    
+    
+    // indent multiline until conditions
+    if (untilTok.li < tokens[s.li].li) {
+        increaseLineIndent(untilTok.li + 1, tokens[s.li].li);
+    }    
+
+    // body recurse
     s.statements.push(findStatements(repeatTok.next(s.li).i, untilTok.prev().i));
 }
 
+
+/**
+ * @param {{ fi: number; li: number; statements: any[]; }} s
+ */
+function parseBegin(s) {
+    let beginTok = tokens[s.fi];
+    let endTok = beginTok.next(s.li, "END");    
+    increaseLineIndent(beginTok.li + 1, endTok.li - 1);    
+}

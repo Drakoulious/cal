@@ -85,7 +85,9 @@ function printResult() {
       resLine += " ".repeat(linesIndent[i]);
     }
     let t = getTokenFromPos(i, 0);
-    if (t !== undefined && t.t === TokenType.Comment) {
+    if (t !== undefined && t.t === TokenType.Comment &&  t.li !== t.lie) {
+    //if (t !== undefined && t.t === TokenType.Comment ) {
+      resLine = resLine.substring(0, resLine.length - linesIndent[i])
       resLine += lines[i];
     }
     else {
@@ -108,14 +110,32 @@ function printResult() {
 /**
  * @param {number} sli Start line index
  * @param {number} eli End line index
+ * @param {number} [addIndent]
  */
 function increaseLineIndent(sli, eli, addIndent) {
+  //console.log(`${sli+1} ${eli+1} ${addIndent} ${(new Error()).stack}`);
   for (var i = sli; i <= eli; i++) {
     if (lines[i].length > 0) {
       if (linesIndent[i] === undefined) {
         linesIndent[i] = 0;
       }      
       linesIndent[i] += addIndent !== undefined ? addIndent : indentSpaces;      
+    }
+  }
+}
+
+/**
+ * @param {number} sli Start line index
+ * @param {number} eli End line index
+ * @param {number} [decIndent]
+ */
+function decreaseLineIndent(sli, eli, decIndent) {
+  for (var i = sli; i <= eli; i++) {
+    if (lines[i].length > 0) {
+      if (linesIndent[i] === undefined) {
+        linesIndent[i] = 0;
+      }      
+      linesIndent[i] -= decIndent !== undefined ? decIndent : indentSpaces;      
     }
   }
 }

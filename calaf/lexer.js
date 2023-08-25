@@ -219,7 +219,12 @@ function lastTokenIndex(fromIndex, maxIndex) {
 function getTokenFromPos(li, ci) {
   let tok;
   tokens.forEach(t => {
-    if (li >= t.li && li <= t.lie && ci >= t.ci && ci <= t.cie) {
+    //if (li >= t.li && li <= t.lie && ci >= t.ci && ci <= t.cie) {
+    if (li === t.li && li === t.lie && ci >= t.ci && ci <= t.cie) {
+      tok = t;
+      return;
+    }
+    else if (li > t.li && li < t.lie) {
       tok = t;
       return;
     }

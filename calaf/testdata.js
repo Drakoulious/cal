@@ -308,7 +308,7 @@ then
   message('ok);
 `})
 
-//#19
+//#20
 testData.push({
   settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
   data: `
@@ -318,3 +318,100 @@ if 2 = 1
 then 
   message('ok);
 `})
+
+//#21
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'false' },
+  data: `
+EntryNo:=0;
+IF ItemVariant.FINDFIRST THEN REPEAT
+  EntryNo+=1;
+  ItemVariant."Entry No.":=EntryNo;
+  ItemVariant.MODIFY;
+UNTIL ItemVariant.NEXT=0;
+`})
+
+
+//#22
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'false' },
+  data: `
+IF x = 1 AND
+  y = 1 THEN
+BEGIN
+  message('ok');
+END;
+`})
+
+//#23
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'true' },
+  data: `
+IF x = 1 AND
+   y = 1 THEN
+BEGIN
+  message('ok');
+END;
+`})
+
+
+//#24
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'false' },
+  data: `
+repeat
+  message('k');
+  begin
+    u:=1;
+  end;
+until x=1;
+`});
+
+//#25
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'false' },
+  data: `
+repeat
+  message('k');
+  begin
+    u:=1;
+  end
+until x=1;
+`});
+
+//#26
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'false' },
+  data: `
+repeat
+  message('k');
+  u:=1;
+until x=1
+  and z=5;
+`});
+
+// block comment tests >
+//#27
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'false' },
+  data: `
+repeat
+  message('k');
+  {
+    u:=1;
+  }
+until x=1;
+`});
+
+//#28
+testData.push({
+  settings: { indExpBetwIfThenByFirstTokenAfterIf: 'false' },
+  data: `
+{ block
+comment
+}
+if 1=1 then
+  message('ok');
+`});
+
+// block comment tests <
