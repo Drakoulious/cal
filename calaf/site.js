@@ -126,7 +126,8 @@ function printResult() {
   editor.setValue(textarea.value);
   for (var i = 0; i < lines.length; i++) {
     if (linesTouched[i] !== undefined) {
-      editor.setGutterMarker(i, "breakpoints", makeMarker());
+      editor.addLineClass(i, "gutter", "TouchedLine")
+      //editor.setGutterMarker(i, "breakpoints", makeMarker());
     }    
   }
   

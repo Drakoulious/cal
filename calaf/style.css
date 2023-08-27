@@ -53,7 +53,8 @@ body {
 }
 
 #log {
-    color: #a7a7a7;
+    color: #c0c0c0;
+    font-size: 13px;
 }
 
 .code {
