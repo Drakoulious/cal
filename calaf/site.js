@@ -99,12 +99,17 @@ function clear2() {
 
 function printResult() {
   textarea.value = "";
-  let difCount = 0;
+  let difCount = 0;  
+  let initialIndent = tokens[0].ci;
   for (var i = 0; i < lines.length; i++) {
     let resLine = "";
     if (linesIndent[i] !== undefined) {
       resLine += " ".repeat(linesIndent[i]);
     }
+    if (lines[i].trimLeft().length > 0) {
+      resLine += " ".repeat(initialIndent);
+    }
+    
     let t = getTokenFromPos(i, 0);
     if (t !== undefined && t.t === TokenType.Comment && t.li !== t.lie) {      
       resLine = resLine.substring(0, resLine.length - linesIndent[i])
