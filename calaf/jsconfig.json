@@ -10,10 +10,10 @@
         "site.js",
         "grammar.js",
         "style.css",
-        "index.html",
-        "numbers.js",
+        "index.html",        
         "test.js",
         "testdata.js",
-        "settings.js"
+        "settings.js",
+        "codemirror/codemirror.js"
     ]
 }

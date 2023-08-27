@@ -6,12 +6,13 @@ var lines = [];
 var linesIndent = [];
 var linesTouched = [];
 var statements = [];
+var editor;
 
 
 function indent() {
   loadSettings();
-  reset(true);
-  lines = textarea.value.split('\n');
+  reset(true);  
+  lines = editor.getValue().split('\n');
   tokenize();
   parse(loadSettings());
 
@@ -22,10 +23,21 @@ function indent() {
  * @param {boolean} loadSample
  */
 function init(loadSample) {
-  textarea = document.getElementById('editor');
+  textarea = document.getElementById('editor');  
+
+  // CodeMirror
+  editor = CodeMirror.fromTextArea(textarea, {
+    lineNumbers: true,
+    gutters: ["CodeMirror-linenumbers", "breakpoints"],
+    mode: "text/cal",
+    highlightSelectionMatches: {annotateScrollbar: true }
+  });
+  //editor.setSize("100%", "80%");  
+
   logt = document.getElementById('log');
+
   if (loadSample) {
-    textarea.value = `IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
+    editor.setValue(`IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
 IF LineNo = 0 THEN
 ERROR(
 Text028,
@@ -52,9 +64,18 @@ END ELSE
 Cust.CheckBlockedCustOnDocs(Cust,"Document Type",FALSE,TRUE);
 END;
 END;
-`;
+`);
   }
 }
+
+
+function makeMarker() {
+  var marker = document.createElement("div");
+  marker.style.color = "#822";
+  marker.innerHTML = "*";
+  return marker;
+}
+
 
 /**
  * @param {boolean} [clearLog]
@@ -67,13 +88,13 @@ function reset(clearLog) {
   statements = [];
   if (clearLog) {
     logt.innerHTML = "";
-  }
-  textarea.paintLineNumbers();
+  }  
 }
 
 function clear2() {
   reset(true);
   textarea.value = "";
+  editor.setValue("");
 }
 
 function printResult() {
@@ -85,8 +106,7 @@ function printResult() {
       resLine += " ".repeat(linesIndent[i]);
     }
     let t = getTokenFromPos(i, 0);
-    if (t !== undefined && t.t === TokenType.Comment &&  t.li !== t.lie) {
-    //if (t !== undefined && t.t === TokenType.Comment ) {
+    if (t !== undefined && t.t === TokenType.Comment && t.li !== t.lie) {      
       resLine = resLine.substring(0, resLine.length - linesIndent[i])
       resLine += lines[i];
     }
@@ -95,15 +115,21 @@ function printResult() {
     }
     if (lines[i] !== resLine) {
       linesTouched[i] = 1;
-      difCount++;
+      difCount++;      
     }
     if (i < lines.length - 1) {
       resLine += '\n';
     }
     textarea.value += resLine;
 
+  }  
+  editor.setValue(textarea.value);
+  for (var i = 0; i < lines.length; i++) {
+    if (linesTouched[i] !== undefined) {
+      editor.setGutterMarker(i, "breakpoints", makeMarker());
+    }    
   }
-  textarea.paintLineNumbers();
+  
   return difCount;
 }
 
@@ -118,8 +144,8 @@ function increaseLineIndent(sli, eli, addIndent) {
     if (lines[i].length > 0) {
       if (linesIndent[i] === undefined) {
         linesIndent[i] = 0;
-      }      
-      linesIndent[i] += addIndent !== undefined ? addIndent : indentSpaces;      
+      }
+      linesIndent[i] += addIndent !== undefined ? addIndent : indentSpaces;
     }
   }
 }
@@ -134,8 +160,8 @@ function decreaseLineIndent(sli, eli, decIndent) {
     if (lines[i].length > 0) {
       if (linesIndent[i] === undefined) {
         linesIndent[i] = 0;
-      }      
-      linesIndent[i] -= decIndent !== undefined ? decIndent : indentSpaces;      
+      }
+      linesIndent[i] -= decIndent !== undefined ? decIndent : indentSpaces;
     }
   }
 }
