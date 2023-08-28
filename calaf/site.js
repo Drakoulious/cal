@@ -7,16 +7,15 @@ var linesIndent = [];
 var linesTouched = [];
 var statements = [];
 var editor;
-
+var touchedLinesCount = 0;
 
 function indent() {
-  loadSettings();
   reset(true);  
   lines = editor.getValue().split('\n');
   tokenize();
   parse(loadSettings());
-
-  logme(`Touched lines: ${printResult()}`);
+  touchedLinesCount = printResult();
+  logme(`Touched lines: <a href="#" onclick="showDiff();">${touchedLinesCount}</a>`);
 }
 
 /**
@@ -37,34 +36,7 @@ function init(loadSample) {
   logt = document.getElementById('log');
 
   if (loadSample) {
-    editor.setValue(`IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
-IF LineNo = 0 THEN
-ERROR(
-Text028,
-SalesHeader."Document Type",SalesHeader."No.",DimMgt.GetDimCombErr)
-ELSE
-ERROR(
-Text029,
-SalesHeader."Document Type",SalesHeader."No.",LineNo,DimMgt.GetDimCombErr);
-
-
-IF "Bill-to Customer No." <> "Sell-to Customer No." THEN BEGIN
-Cust.GET("Bill-to Customer No.");
-IF Receive THEN
-Cust.CheckBlockedCustOnDocs(Cust,"Document Type",FALSE,TRUE)
-ELSE BEGIN
-IF Ship THEN BEGIN
-SalesLine.RESET;
-SalesLine.SETRANGE("Document Type","Document Type");
-SalesLine.SETRANGE("Document No.","No.");
-SalesLine.SETFILTER(SalesLine."Qty. to Ship",'<>0');
-IF SalesLine.FIND('-') THEN
-Cust.CheckBlockedCustOnDocs(Cust,"Document Type",TRUE,TRUE);
-END ELSE
-Cust.CheckBlockedCustOnDocs(Cust,"Document Type",FALSE,TRUE);
-END;
-END;
-`);
+    editor.setValue(demoCode);
   }
 }
 
@@ -78,22 +50,25 @@ function makeMarker() {
 
 
 /**
- * @param {boolean} [clearLog]
+ * @param {boolean} [isClearLog]
  */
-function reset(clearLog) {
+function reset(isClearLog) {
   linesIndent = [];
   linesTouched = [];
   lines = [];
   tokens = [];
   statements = [];
-  if (clearLog) {
-    logt.innerHTML = "";
-  }  
+  touchedLinesCount = 0;
+  if (isClearLog) {
+    clearLog();
+  }    
 }
 
 function clear2() {
   reset(true);
-  textarea.value = "";
+  textarea.value = "";  
+  editor.getWrapperElement().style.display = "block";
+  document.getElementById("view").style.display = "none";
   editor.setValue("");
 }
 
@@ -179,3 +154,39 @@ function logme(v) {
   logt.innerHTML += v + '<br>';
 }
 
+function clearLog() {
+  logt.innerHTML = "";
+}
+
+var value, orig1, orig2, dv;
+function showDiff() {  
+  let value = editor.getValue();
+  let orig1 = value;
+  let orig2 = lines.join("\n");
+
+  editor.getWrapperElement().style.display = "none";
+  document.getElementById("view").style.display = "inline";  
+
+  if (value == null) return;
+  var target = document.getElementById("view");
+  target.innerHTML = "";
+  dv = CodeMirror.MergeView(target, {
+    value: value,
+    origLeft:  null,
+    orig: orig2,
+    lineNumbers: true,
+    highlightDifferences: true,
+    mode: "text/cal"
+  });
+
+  clearLog();
+  logme(`<a href="#" onclick="hideDiffTool();">back</a>`);  
+}
+
+function hideDiffTool() {
+  editor.getWrapperElement().style.display = "block";
+  document.getElementById("view").style.display = "none";  
+  clearLog();
+  logme(`Touched lines: <a href="#" onclick="showDiff();">${touchedLinesCount}</a>`);
+ 
+}

@@ -14,6 +14,7 @@
         "test.js",
         "testdata.js",
         "settings.js",
+        "demoCode.js",
         "codemirror/codemirror.js"
     ]
 }

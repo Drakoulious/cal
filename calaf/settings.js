@@ -1,7 +1,8 @@
 "use strict";
 
 var defaultSettings = {
-    indExpBetwIfThenByFirstTokenAfterIf: 'true' 
+    indExpBetwIfThenByFirstTokenAfterIf: 'true',
+    demoCodeOnStartup: 'true'
 }
 
 function loadSettings() {
