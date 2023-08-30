@@ -11,10 +11,14 @@ var touchedLinesCount = 0;
 
 function indent() {
   reset(true);  
+  let scrollInfo = editor.getScrollInfo();
+  let eTop = scrollInfo.top;
+  let eLeft = scrollInfo.left;
   lines = editor.getValue().split('\n');
   tokenize();
   parse(loadSettings());
   touchedLinesCount = printResult();
+  editor.scrollTo(eLeft, eTop);
   logme(`Touched lines: <a href="#" onclick="showDiff();">${touchedLinesCount}</a>`);
 }
 
@@ -106,8 +110,7 @@ function printResult() {
   editor.setValue(textarea.value);
   for (var i = 0; i < lines.length; i++) {
     if (linesTouched[i] !== undefined) {
-      editor.addLineClass(i, "gutter", "TouchedLine")
-      //editor.setGutterMarker(i, "breakpoints", makeMarker());
+      editor.addLineClass(i, "gutter", "TouchedLine")      
     }    
   }
   
@@ -164,6 +167,10 @@ function showDiff() {
   let orig1 = value;
   let orig2 = lines.join("\n");
 
+  let scrollInfo = editor.getScrollInfo();
+  let eTop = scrollInfo.top;
+  let eLeft = scrollInfo.left;
+
   editor.getWrapperElement().style.display = "none";
   document.getElementById("view").style.display = "inline";  
 
@@ -178,14 +185,27 @@ function showDiff() {
     highlightDifferences: true,
     mode: "text/cal"
   });
+  dv.editor().scrollTo(eLeft, eTop);
 
+  let editor2 = dv.editor();
+  for (var i = 0; i < lines.length; i++) {
+    if (linesTouched[i] !== undefined) {
+      editor2.addLineClass(i, "gutter", "TouchedLine")      
+    }    
+  }
+  
   clearLog();
-  logme(`<a href="#" onclick="hideDiffTool();">back</a>`);  
+  logme(`<a href="#" onclick="hideDiffTool();">close</a>`);  
 }
 
 function hideDiffTool() {
+  let scrollInfo = dv.editor().getScrollInfo();
+  let eTop = scrollInfo.top;
+  let eLeft = scrollInfo.left;
+
   editor.getWrapperElement().style.display = "block";
   document.getElementById("view").style.display = "none";  
+  editor.scrollTo(eLeft, eTop);
   clearLog();
   logme(`Touched lines: <a href="#" onclick="showDiff();">${touchedLinesCount}</a>`);
  

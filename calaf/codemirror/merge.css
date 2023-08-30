@@ -1,11 +1,10 @@
 .CodeMirror-merge {
   position: relative;
-  border: 1px solid #ddd;
   white-space: pre;
 }
 
 .CodeMirror-merge, .CodeMirror-merge .CodeMirror {
-  height: 600px;
+  height: 80vh;
 }
 
 .CodeMirror-merge-2pane .CodeMirror-merge-pane { width: 47%; }
