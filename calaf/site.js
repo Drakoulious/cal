@@ -19,7 +19,7 @@ function indent() {
   parse(loadSettings());
   touchedLinesCount = printResult();
   editor.scrollTo(eLeft, eTop);
-  logme(`Touched lines: <a href="#" onclick="showDiff();">${touchedLinesCount}</a>`);
+  logme(`Touched lines: <a href="#" onclick="showDiff();event.preventDefault();">${touchedLinesCount}</a>`);
 }
 
 /**
@@ -195,7 +195,7 @@ function showDiff() {
   }
   
   clearLog();
-  logme(`<a href="#" onclick="hideDiffTool();">close</a>`);  
+  logme(`<a href="#" onclick="hideDiffTool();event.preventDefault();">close</a>`);  
 }
 
 function hideDiffTool() {
@@ -207,6 +207,6 @@ function hideDiffTool() {
   document.getElementById("view").style.display = "none";  
   editor.scrollTo(eLeft, eTop);
   clearLog();
-  logme(`Touched lines: <a href="#" onclick="showDiff();">${touchedLinesCount}</a>`);
+  logme(`Touched lines: <a href="#" onclick="showDiff();event.preventDefault();">${touchedLinesCount}</a>`);
  
 }

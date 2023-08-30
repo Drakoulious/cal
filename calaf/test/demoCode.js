@@ -1,4 +1,5 @@
-var demoCode = `IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
+var demoCode = `// demo code
+IF NOT DimMgt.CheckDocDimComb(TempDocDim) THEN
 IF LineNo = 0 THEN
 ERROR(
 Text028,

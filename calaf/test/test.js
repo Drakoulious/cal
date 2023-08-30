@@ -32,6 +32,6 @@ function runTestById(id) {
       }    
     }
   }  
-  logme(`<font color="${passed ? `green` : `red`}"><a href="#" onclick="reset(true);runTestById(${id});">Test#${id}</a>, Touched lines: ${diffCount}, Tokens: ${tokens.length}, Passed: ${passed} </font>`);
+  logme(`<font color="${passed ? `green` : `red`}"><a href="#" onclick="reset(true);runTestById(${id});event.preventDefault();">Test#${id}</a>, Touched lines: ${diffCount}, Tokens: ${tokens.length}, Passed: ${passed} </font>`);
   return passed;
 }

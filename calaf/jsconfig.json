@@ -5,16 +5,16 @@
      "target": "ES2015"
     },
     "files": [
-        "lexer.js",
-        "parser.js",
+        "parser/lexer.js",
+        "parser/parser.js",
         "site.js",
-        "grammar.js",
+        "parser/grammar.js",
         "style.css",
         "index.html",        
-        "test.js",
-        "testdata.js",
+        "test/test.js",
+        "test/testdata.js",
         "settings.js",
-        "demoCode.js",
+        "test/demoCode.js",
         "codemirror/codemirror.js"
     ]
 }
