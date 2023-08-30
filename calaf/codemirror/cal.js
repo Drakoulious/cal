@@ -24,7 +24,6 @@ CodeMirror.defineMode("cal", function() {
     "repeat REPEAT then THOEN to TO " +
     "until UNTIL while WHILE with WITH xor XOR " +        
     "break BREAK continue CONTINUE " +    
-    "message MESSAGE " +      
     "false FALSE true TRUE exit EXIT "
     );
   var atoms = {"null": true};
