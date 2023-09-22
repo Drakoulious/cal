@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="google" content="notranslate" />
+
+  <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=2.4">
+
+  <title>DotNet Type helper</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="..">DotNet Type helper</a>
+
+
+  </nav>
+
+  <br><br><br>
+
+  <div class="container">
+	Running the following command in cmd<br><br>
+	<b><code>powershell -c "$f='System.Text.StringBuilder';$t=$f-as[type];$a=[System.Reflection.Assembly]::GetAssembly($t);$t.FullName+'.'''+$a.FullName+''''"</code></b>
+	<br>
+	<br>
+	will return a value that you can copy to the Development Environment's symbol menu.	
+	<br>
+	<br>
+	
+	<br>
+	<img src="dotnet.png">
+
+
+
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="bootstrap/jquery-3.3.1.slim.min.js"></script>
+  <script src="bootstrap/popper.min.js"></script>
+  <script src="bootstrap/bootstrap.min.js"></script>
+</body>
+
+</html>
